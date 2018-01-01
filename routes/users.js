@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
+const user = require('../controllers/usersCtrl')
+const authorization = require('../Helpers/authorization')
+const imageHelper = require('../Helpers/imageHelper')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/:id', authorization.authorization, user.getUser)
+router.put('/update/:id',
+  authorization.authorization,
+  authorization.isSelf,
+  imageHelper.multer.single('image'),
+  imageHelper.sendUploadToGCS,
+  user.updateProfile
+)
 
-module.exports = router;
+module.exports = router
