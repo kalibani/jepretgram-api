@@ -12,4 +12,5 @@ router.post('/post',
   post.postImage
 )
 router.post('/comment', authorization.authorization, post.addComment)
+router.post('/givelove', authorization.authorization, post.giveLove)
 module.exports = router

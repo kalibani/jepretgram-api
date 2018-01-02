@@ -6,16 +6,14 @@ let postSchema = new Schema({
   posted_by: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   caption: { type: String },
   love: [{
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    love: { type: String }
+    user: { type: Schema.Types.ObjectId, ref: 'User'}
   }],
   comment: [{
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     comment: { type: String }
   }],
   follow: [{
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    follow: { type: String, default: 'follow' }
+    user: { type: Schema.Types.ObjectId, ref: 'User'}
   }],
   created_at: { type: Date, default: Date.now }
 })

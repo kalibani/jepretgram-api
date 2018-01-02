@@ -5,6 +5,7 @@ class PostCtrl {
   static getPosts(req, res){
     Post.find()
     .populate('posted_by')
+    .populate('love.user')
     .populate('comment.user')
     .then((post) => {
       res.status(200).json({
@@ -58,39 +59,32 @@ class PostCtrl {
 
   static giveLove(req, res){
     let id = {  _id : req.body.id }
-
-    Post.findById(id).then((data) => {
-      if (data.love.user._id === req.decoded.userId && data.love.love == 'loved') {
-        data.love.love = 'unloved'
-        data.save().then((updateLove) => {
-          res.status(200).json({updateLove})
-        })
-      }else {
-        
-      }
-
-    })
-
-    Post.findOneAndUpdate(id, {
-        $push: {
-          comment: {
-            user: req.decoded.userId,
-            comment: req.body.comment
+    let givelove = ''
+    Post.findOne(id).then((data) => {
+      if (data.posted_by != req.decoded.userId) {
+        data.love.map(a =>{
+          if (a.user == req.decoded.userId) {
+            givelove = 'loved'
+            a._id = req.decoded.userId
           }
+        })
+        if (givelove == 'loved') {
+          data.love.pull(req.decoded.userId)
+          data.save().then((updateData) => {
+            res.status(200).json({message: 'Success give love', data : updateData})
+          }).catch(err => res.send(err))
+        }else {
+          data.love.push({user:req.decoded.userId})
+          data.save().then((updateData) => {
+            res.status(200).json({message: 'Success give love', data : updateData})
+          }).catch(err => res.send(err))
         }
-      }, {
-        new: true,
-        safe: true,
-        upsert: true
-      },
-    ).then((comment) => {
-      res.status(200).json({
-        message: ' Success add comment',
-        data : comment
-      })
-    }).catch((err) => {
-      res.send(err)
-    })
+      }else {
+        res.status(200).json({
+          message: 'gabisa like foto sendiri'
+        })
+      }
+    }).catch(err => res.send(err))
   }
 
 
