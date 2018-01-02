@@ -25,21 +25,14 @@ let userSchema = new Schema({
   },
   image:{
     type: String
-  }
+  },
+  follow: [{
+    user: { type: Schema.Types.ObjectId, ref: 'User'}
+  }]
 })
 
 userSchema.plugin(idvalidator)
 userSchema.plugin(uniqueValidator)
-
-userSchema.pre('save', function(callback) {
-  let plainPassword = this.password
-  bcrypt.hash(plainPassword, 10).then((hash) =>{
-    console.log('hash--->', hash)
-    this.password = hash
-    callback()
-  })
-  .catch(callback)
-})
 
 userSchema.methods.comparePassword = function (plainPassword, callback) {
   console.log('compare--->', plainPassword, this.password)

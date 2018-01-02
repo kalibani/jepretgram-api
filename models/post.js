@@ -12,9 +12,6 @@ let postSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     comment: { type: String }
   }],
-  follow: [{
-    user: { type: Schema.Types.ObjectId, ref: 'User'}
-  }],
   created_at: { type: Date, default: Date.now }
 })
 

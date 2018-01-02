@@ -58,7 +58,7 @@ class PostCtrl {
   }
 
   static giveLove(req, res){
-    let id = {  _id : req.body.id }
+    let id = { _id : req.body.id }
     let givelove = ''
     Post.findOne(id).then((data) => {
       if (data.posted_by != req.decoded.userId) {
@@ -71,24 +71,21 @@ class PostCtrl {
         if (givelove == 'loved') {
           data.love.pull(req.decoded.userId)
           data.save().then((updateData) => {
-            res.status(200).json({message: 'Success give love', data : updateData})
+            res.status(200).json({message: 'Unloved', data : updateData})
           }).catch(err => res.send(err))
         }else {
           data.love.push({user:req.decoded.userId})
           data.save().then((updateData) => {
-            res.status(200).json({message: 'Success give love', data : updateData})
+            res.status(200).json({message: 'Loved', data : updateData})
           }).catch(err => res.send(err))
         }
       }else {
         res.status(200).json({
-          message: 'gabisa like foto sendiri'
+          message: 'gabisa love foto sendiri'
         })
       }
     }).catch(err => res.send(err))
   }
-
-
-
 
 }
 

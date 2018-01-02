@@ -1,16 +1,20 @@
 const User = require('../models/users')
 const jwt = require('jsonwebtoken')
-
+const bcrypt = require('bcrypt')
 class Authentication {
 
   static register(req, res){
     var newUser = new User(req.body)
-    newUser.save().then((dataUser) => {
-      res.status(200).json({ message: 'Register Success!', dataUser })
-    })
-    .catch((err) => {
-      res.status(404).send(err)
-    })
+    bcrypt.hash(req.body.password, 10).then((hash) => {
+      newUser.password = hash
+      newUser.save().then((dataUser) => {
+        res.status(200).json({ message: 'Register Success!', dataUser })
+      })
+      .catch((err) => {
+        res.status(404).send(err)
+      })
+    }).catch(err => res.send(err))
+
   }
 
   static login(req, res){

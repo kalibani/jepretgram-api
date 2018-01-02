@@ -12,5 +12,6 @@ router.put('/update/:id',
   imageHelper.sendUploadToGCS,
   user.updateProfile
 )
+router.post('/follow', authorization.authorization, user.follow)
 
 module.exports = router
