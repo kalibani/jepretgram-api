@@ -9,6 +9,7 @@ require('dotenv').config()
 const index = require('./routes/index')
 const users = require('./routes/users')
 const auth = require('./routes/authentication')
+const post = require('./routes/post')
 const mongoose = require('mongoose')
 const app = express()
 
@@ -34,6 +35,7 @@ app.use(cors())
 app.use('/', index)
 app.use('/api/users', users)
 app.use('/api/authentication', auth)
+app.use('/api/jepret', post)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

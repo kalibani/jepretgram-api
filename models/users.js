@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const uniqueValidator = require('mongoose-unique-validator');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const idvalidator = require('mongoose-id-validator')
+const uniqueValidator = require('mongoose-unique-validator')
+const bcrypt = require('bcrypt')
 
 let userSchema = new Schema({
   email:{
@@ -27,6 +28,7 @@ let userSchema = new Schema({
   }
 })
 
+userSchema.plugin(idvalidator)
 userSchema.plugin(uniqueValidator)
 
 userSchema.pre('save', function(callback) {
@@ -51,4 +53,4 @@ userSchema.methods.comparePassword = function (plainPassword, callback) {
   })
 }
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema)
