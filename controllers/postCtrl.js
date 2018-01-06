@@ -4,6 +4,7 @@ class PostCtrl {
 
   static getPosts(req, res){
     Post.find()
+    .sort({created_at: -1})
     .populate('posted_by')
     .populate('love.user')
     .populate('comment.user')
@@ -16,7 +17,12 @@ class PostCtrl {
     .catch(err => { res.status(404).send(err)})
   }
 
+  static getPostById(req, res){
+
+  }
+
   static postImage(req, res){
+    console.log('kenapaa', req.body.image);
     req.body.image = req.file.cloudStoragePublicUrl
     let newPost = new Post({
       image: req.body.image,

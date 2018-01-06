@@ -2,7 +2,6 @@ const User = require('../models/users');
 const bcrypt = require('bcrypt')
 
 class UserCtrl {
-
   static getUser(req, res) {
     User.findById(req.params.id)
     .populate('follow.user')
@@ -21,12 +20,28 @@ class UserCtrl {
     .catch(err => res.send(err))
   }
 
-
-  static updateProfile(req, res) {
+  static updatePhoto(req, res){
     let id = {  _id : req.params.id }
     if(req.file){
       req.body.image = req.file.cloudStoragePublicUrl
     }
+    let update = {
+      image : req.body.image
+    }
+    User.findByIdAndUpdate(id, update,{
+      new: true, // return new updated document
+    })
+    .then(user => {
+      res.status(200).json({
+        message: 'Update Photo Profile Succes!',
+        data: user
+      })
+    })
+    .catch(err => res.send(err))
+  }
+
+  static updateProfile(req, res) {
+    let id = {  _id : req.params.id }
     if (req.body.password!=='') {
       var salt = bcrypt.genSaltSync(8)
       req.body.password = bcrypt.hashSync(req.body.password, salt)
@@ -53,7 +68,6 @@ class UserCtrl {
         email: req.body.email,
         username: req.body.username,
         fullname: req.body.fullname,
-        image: req.body.image,
         runValidators: true, context: 'query'
       }
       User.findByIdAndUpdate(id, update,{
@@ -98,6 +112,11 @@ class UserCtrl {
         })
       }
     }).catch(err => res.send(err))
+  }
+
+  static getProfile(req, res){
+    console.log('ini');
+    res.json(req.decoded)
   }
 
 

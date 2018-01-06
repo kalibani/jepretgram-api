@@ -23,30 +23,32 @@ class Authentication {
       {username: req.body.username}
     ]})
     .then((dataUser)=>{
+      console.log(dataUser);
       if(!dataUser){
-        res.status(404).send('Unregistered, Please Register First!')
-      }
-
-      dataUser.comparePassword(req.body.password, (err, success) => {
-        if (err || !success) {
-          return res.status(200).json({
-            message: 'Authentication failed, Email or password did not match'
-          })
-        }
-        let payload = {
-          userId: dataUser._id,
-          email: dataUser.email,
-          username: dataUser.username
-        }
-        let token = jwt.sign(payload, process.env.SECRET)
-        res.status(200).json({
-          message:"Login Succes!",
-          token: token
+        res.send('Unregistered Email/Username, Please Register First!')
+      }else {
+        dataUser.comparePassword(req.body.password, (err, success) => {
+          if (err || !success) {
+            return res.status(200).json({
+              message: 'Authentication failed, Email/Username or password did not match'
+            })
+          }else {
+            let payload = {
+              userId: dataUser._id,
+              email: dataUser.email,
+              username: dataUser.username
+            }
+            let token = jwt.sign(payload, process.env.SECRET)
+            res.status(200).json({
+              message:"Login Succes!",
+              token: token
+            })
+          }
         })
-      })
+      }
     })
-    .catch(err=>{
-      res.send(err)
+    .catch(err => {
+      console.log(err)
     })
   }
 
