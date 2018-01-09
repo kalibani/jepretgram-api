@@ -67,6 +67,7 @@ class PostCtrl {
     let id = { _id : req.body.id }
     let givelove = ''
     Post.findOne(id).then((data) => {
+      console.log(data);
       if (data.posted_by != req.decoded.userId) {
         data.love.map(a =>{
           if (a.user == req.decoded.userId) {

@@ -98,18 +98,16 @@ class UserCtrl {
         if (follow == 'followed') {
           data.follow.pull(req.decoded.userId)
           data.save().then((updateData) => {
-            res.status(200).json({message: 'Unfollow Success', data : updateData})
+            res.status(200).json({message: 'unfollow', data : updateData})
           }).catch(err => res.send(err))
         }else {
           data.follow.push({user:req.decoded.userId})
           data.save().then((updateData) => {
-            res.status(200).json({message: 'followed!', data : updateData})
+            res.status(200).json({message: 'following!', data : updateData})
           }).catch(err => res.send(err))
         }
       }else {
-        res.status(403).json({
-          message: 'forbidden'
-        })
+        res.status(200).json({message:'gabisa follow sendiri'})
       }
     }).catch(err => res.send(err))
   }
